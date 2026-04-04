@@ -13,6 +13,7 @@ import '../styling/App.css'
 const answer0 = {
     answerID : 911,
     answerText : "A variable stores data that can be used later in a program"
+    
 }
 
 const answer1 = {
