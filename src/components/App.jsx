@@ -1,7 +1,4 @@
 import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from './assets/vite.svg'
-// import heroImg from './assets/hero.png'
 import Login from './Login.jsx'
 import Dashboard from "./Dashboard.jsx";
 import Courses from './Courses.jsx'
@@ -13,7 +10,6 @@ import '../styling/App.css'
 const answer0 = {
     answerID : 911,
     answerText : "A variable stores data that can be used later in a program"
-    
 }
 
 const answer1 = {
@@ -74,19 +70,22 @@ const answer11 = {
 const question0 = {
     questionID : 420,
     questionText : "What is the purpose of a variable in programming?",
-    answerChoices : [ answer0, answer1, answer2, answer3 ]
+    answerChoices : [ answer0, answer1, answer2, answer3 ],
+    correctAnswerID : 911
 }
 
 const question1 = {
     questionID : 421,
     questionText : "What does an if statement do in programming?",
-    answerChoices : [ answer4, answer5, answer6, answer7 ]
+    answerChoices : [ answer4, answer5, answer6, answer7 ],
+    correctAnswerID : 915
 }
 
 const question2 = {
     questionID : 422,
     questionText : "What is a loop mainly used for in programming?",
-    answerChoices : [ answer8, answer9, answer10, answer11 ]
+    answerChoices : [ answer8, answer9, answer10, answer11 ],
+    correctAnswerID : 919
 }
 
 const testQuiz = {
@@ -108,13 +107,63 @@ const testCourse = {
 function App() {
     const [currentPage, setCurrentPage] = useState("login");
 
+    const [progressReport, setProgressReport] = useState({
+        quizResults : [],
+        completedQuizzes : 0,
+        totalQuizzes : testCourse.quizzes.length,
+        courseCompletion : 0
+    });
+
+    function handleQuizSubmit(result) {
+        const updatedQuizResults = [...progressReport.quizResults];
+
+        const existingIndex = updatedQuizResults.findIndex(
+            (quizResult) => quizResult.quizID === result.quizID
+        );
+
+        if (existingIndex >= 0) {
+            updatedQuizResults[existingIndex] = result;
+        } else {
+            updatedQuizResults.push(result);
+        }
+
+        const completedQuizzes = updatedQuizResults.length;
+        const totalQuizzes = testCourse.quizzes.length;
+        const courseCompletion = Math.round((completedQuizzes / totalQuizzes) * 100);
+
+        setProgressReport({
+            quizResults : updatedQuizResults,
+            completedQuizzes : completedQuizzes,
+            totalQuizzes : totalQuizzes,
+            courseCompletion : courseCompletion
+        });
+
+        setCurrentPage("score");
+    }
+
     return (
         <div id={"appPage"}>
             {currentPage === "login" && <Login onLogin={() => setCurrentPage("dashboard")} />}
             {currentPage === "dashboard" && <Dashboard course={testCourse}/>}
-            {currentPage === "intro" && <QuizInstructions quiz={testQuiz} onStart={() => setCurrentPage("quiz")} />}
-            {currentPage === "quiz" && <Quiz quiz={testQuiz} onSubmit={() => setCurrentPage("score")} />}
-            {currentPage === "score" && <QuizScores />}
+            {currentPage === "intro" && (
+                <QuizInstructions
+                    quiz={testQuiz}
+                    onStart={() => setCurrentPage("quiz")}
+                />
+            )}
+            {currentPage === "quiz" && (
+                <Quiz
+                    quiz={testQuiz}
+                    onSubmit={handleQuizSubmit}
+                />
+            )}
+            {currentPage === "score" && (
+                <QuizScores
+                    course={testCourse}
+                    progressReport={progressReport}
+                    onBackToDashboard={() => setCurrentPage("dashboard")}
+                />
+            )}
         </div>
     );
 }
