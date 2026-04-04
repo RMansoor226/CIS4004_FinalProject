@@ -5,30 +5,42 @@ import '../styling/Quiz.css'
 function Quiz(props) {
     const allQuestions = props.quiz.questions;
 
-    // Tracks selected question
     const [currentQuestion, setCurrentQuestion] = useState(0);
-
-    // Track currently selected answers
     const [selectedAnswers, setSelectedAnswers] = useState({});
 
-    // Functions to change selected question
     function navigateToQuestion(questionNumber) {
-        console.log("Navigated to question #" + questionNumber);
         setCurrentQuestion(questionNumber);
     }
 
     function previousQuestion() {
-        console.log("Navigated to previous question");
-
-        // Move to the previous question if the current index is greater than 0
         setCurrentQuestion((prevQ) => Math.max(prevQ - 1, 0));
     }
 
     function nextQuestion() {
-        console.log("Navigated to next question");
-
-        // Move to the next question if the current index is less than the index of the last item
         setCurrentQuestion((nextQ) => Math.min(nextQ + 1, allQuestions.length - 1));
+    }
+
+    function submitQuiz() {
+        let correctCount = 0;
+
+        allQuestions.forEach((question, index) => {
+            if (selectedAnswers[index] === question.correctAnswerID) {
+                correctCount++;
+            }
+        });
+
+        const totalQuestions = allQuestions.length;
+        const gradePercent = Math.round((correctCount / totalQuestions) * 100);
+
+        const result = {
+            quizID : props.quiz.quizID,
+            quizName : props.quiz.quizName,
+            score : correctCount,
+            totalQuestions : totalQuestions,
+            gradePercent : gradePercent
+        };
+
+        props.onSubmit(result);
     }
 
     return (
@@ -57,7 +69,7 @@ function Quiz(props) {
 
             <nav id={"quizNavButtons"}>
                 <button id={"backButton"} onClick={previousQuestion}>Back</button>
-                <button id={"submitButton"} onClick={props.onSubmit}>Submit</button>
+                <button id={"submitButton"} onClick={submitQuiz}>Submit</button>
                 <button id={"nextButton"} onClick={nextQuestion}>Next</button>
             </nav>
         </section>
