@@ -12,95 +12,95 @@ import '../styling/App.css'
 
 const answer0 = {
     answerID : 911,
-    answerText : "This is an example answer for Option A to test if the usage of props is proper"
+    answerText : "A variable stores data that can be used later in a program"
 }
 
 const answer1 = {
     answerID : 912,
-    answerText : "This is an example answer for Option B to test if the usage of props is proper"
+    answerText : "A variable repeats code automatically"
 }
 
 const answer2 = {
     answerID : 913,
-    answerText : "This is an example answer for Option C to test if the usage of props is proper"
+    answerText : "A variable is used only for webpage colors"
 }
 
 const answer3 = {
     answerID : 914,
-    answerText : "This is an example answer for Option D to test if the usage of props is proper"
+    answerText : "A variable can only store numbers"
 }
 
 const answer4 = {
     answerID : 915,
-    answerText : "This is an example answer for Option A to test if the usage of props is proper"
+    answerText : "An if statement checks whether a condition is true before running code"
 }
 
 const answer5 = {
-    answerID : 912,
-    answerText : "This is an example answer for Option B to test if the usage of props is proper"
+    answerID : 916,
+    answerText : "An if statement creates a loop that never ends"
 }
 
 const answer6 = {
-    answerID : 916,
-    answerText : "This is an example answer for Option C to test if the usage of props is proper"
+    answerID : 917,
+    answerText : "An if statement stores multiple values in one place"
 }
 
 const answer7 = {
-    answerID : 917,
-    answerText : "This is an example answer for Option D to test if the usage of props is proper"
+    answerID : 918,
+    answerText : "An if statement is only used for styling text"
 }
 
 const answer8 = {
-    answerID : 918,
-    answerText : "This is an example answer for Option A to test if the usage of props is proper"
+    answerID : 919,
+    answerText : "A loop repeats a block of code multiple times"
 }
 
 const answer9 = {
-    answerID : 919,
-    answerText : "This is an example answer for Option B to test if the usage of props is proper"
+    answerID : 920,
+    answerText : "A loop is used to name variables"
 }
 
 const answer10 = {
     answerID : 921,
-    answerText : "This is an example answer for Option C to test if the usage of props is proper"
+    answerText : "A loop changes all numbers into strings"
 }
 
 const answer11 = {
     answerID : 922,
-    answerText : "This is an example answer for Option D to test if the usage of props is proper"
+    answerText : "A loop is a type of comment"
 }
 
 const question0 = {
     questionID : 420,
-    questionText : "Version 0: This is a random set of text to test if the question text portion is working properly",
+    questionText : "What is the purpose of a variable in programming?",
     answerChoices : [ answer0, answer1, answer2, answer3 ]
 }
 
 const question1 = {
     questionID : 421,
-    questionText : "Version 1: This is a random set of text to test if the question text portion is working properly",
+    questionText : "What does an if statement do in programming?",
     answerChoices : [ answer4, answer5, answer6, answer7 ]
 }
 
 const question2 = {
     questionID : 422,
-    questionText : "Version 2: This is a random set of text to test if the question text portion is working properly",
+    questionText : "What is a loop mainly used for in programming?",
     answerChoices : [ answer8, answer9, answer10, answer11 ]
 }
 
 const testQuiz = {
     quizID : 226,
-    quizName : "Test Quiz",
-    quizDescription : "This is an example description for a test quiz to test its basic functionality",
-    quizTags : [ "test", "prototype", "not ready" ],
+    quizName : "Programming Basics Quiz",
+    quizDescription : "This quiz tests basic programming concepts",
+    quizTags : [ "programming", "basics", "intro" ],
     questions : [ question0, question1, question2 ]
 }
 
 const testCourse = {
     courseID : 310,
-    courseName : "Test Course",
-    courseDescription : "This is an example description for a test course to test its basic functionality",
-    courseTags : [ "test course", "prototype course", "course not ready"],
+    courseName : "Programming Fundamentals",
+    courseDescription : "This course introduces beginner programming concepts",
+    courseTags : [ "programming", "beginner", "fundamentals"],
     quizzes : [ testQuiz ]
 }
 
@@ -117,7 +117,5 @@ function App() {
         </div>
     );
 }
-
-
 
 export default App
