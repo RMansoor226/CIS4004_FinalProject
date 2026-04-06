@@ -1,5 +1,7 @@
-import './Dashboard.css';
+import '../styling/Dashboard.css';
+import {useState} from "react";
 
+// Component that represents dashboard page's header
 function Header() {
     return (
       <section id={"headerSection"}>
@@ -12,27 +14,73 @@ function Header() {
     );
 }
 
+// Component that represents individual course cards
 function CourseCard(props) {
     return (
-        <section className={"courseCard"}>
+        <section className={"card"}>
             <h1>{props.course.courseName}</h1>
-            <h2>Tags</h2>
-            <ul>
-                {props.course.courseTags.map((tag) => (
-                    <li>{tag}</li>
+            <ul className={"tags"}>
+                {props.course.courseTags.map((tag, index) => (
+                    <li key={index}>{tag}</li>
                 ))}
             </ul>
+            <button onClick={props.onPick}>Select</button>
         </section>
     );
 }
 
-// function CourseView(props) {
-//     return (
-//
-//     );
-// }
+// Component that represents left-side panel that houses all course cards
+function CourseView(props) {
+    return (
+        <section>
+            {props.courseGroup.map((currCourse) => (
+                <CourseCard
+                    key={currCourse.courseID}
+                    course={currCourse}
+                    onPick={
+                        () => props.onCourseSelect(currCourse)
+                    }
+                />
+            ))}
+        </section>
+    );
+}
 
+// Component that represents individual quiz cards
+function QuizCard(props) {
+    return (
+        <div className={"card"}>
+            <h1>{props.quiz.quizName}</h1>
+            <ul className={"tags"}>
+                {props.quiz.quizTags.map((tag, index) => (
+                    <li key={index}>{tag}</li>
+                ))}
+            </ul>
+            <button onClick={props.onQuizSelect}>Select</button>
+        </div>
+    );
+}
+
+// Component that represents right-side panel that houses all quiz cards
+function QuizView(props) {
+    return (
+        <section>
+            {props.quizGroup.map((currQuiz) => (
+                <QuizCard
+                    key={currQuiz.quizID}
+                    quiz={currQuiz}
+                    onQuizSelect={() => props.onQuizSelect(currQuiz)} />
+            ))}
+        </section>
+    );
+}
+
+// Component that produces entire dashboard page using all previously listed components
 function Dashboard(props) {
+    // Track currently selected course
+    const [currentCourse, setCurrentCourse] = useState(props.courses[0]);
+    const setCurrentQuiz = props.onQuizSelect;
+
     return (
         // Header Element that includes Logo with Navigation Buttons
         // Separate Panel that starts as one unit showing all courses
@@ -43,15 +91,13 @@ function Dashboard(props) {
         <div id={"dashboardPage"}>
             <Header />
             <div id={"contentPanels"}>
-                <section id={"coursePanel"}>
-                    <CourseCard course={props.course}/>
+                <section className={"panel"} id={"coursePanel"}>
+                    <CourseView courseGroup={props.courses} onCourseSelect={setCurrentCourse}/>
                 </section>
-                <section id={"quizPanel"}>
-                    <CourseCard course={props.course}/>
+                <section className={"panel"} id={"quizPanel"}>
+                    <QuizView quizGroup={currentCourse.quizzes} onQuizSelect={setCurrentQuiz}/>
                 </section>
             </div>
-
-
         </div>
     );
 }
