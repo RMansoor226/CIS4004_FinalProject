@@ -2,13 +2,17 @@ import '../styling/Dashboard.css';
 import {useState} from "react";
 
 // Component that represents dashboard page's header
-function Header() {
+function Header({user}) {
+    const title = user?.role === "admin"
+        ? "Admin Dashboard"
+        : "User Dashboard";
     return (
       <section id={"headerSection"}>
-          <h1>CodeSchool</h1>
+          <h1>{title}</h1>
           <nav id={"headerButtons"}>
               <button>Courses</button>
               <button>Progress</button>
+              {user?.role === "admin" && <button>Manage</button>}
           </nav>
       </section>
     );
@@ -89,10 +93,18 @@ function Dashboard(props) {
         // Second panel is a view of the available quizzes
         // Upon selection of a quiz the page jumps to the selected quiz's instructions page
         <div id={"dashboardPage"}>
-            <Header />
+            <Header user={props.currentUser} />
             <div id={"contentPanels"}>
                 <section className={"panel"} id={"coursePanel"}>
                     <CourseView courseGroup={props.courses} onCourseSelect={setCurrentCourse}/>
+                    {props.currentUser?.role === "admin" && (
+                        <div>
+                            <h3>Admin Controls</h3>
+                            <button>Add Course</button>
+                            <button>Edit Course</button>
+                            <button>Delete Course</button>
+                        </div>
+                    )}
                 </section>
                 <section className={"panel"} id={"quizPanel"}>
                     <QuizView quizGroup={currentCourse.quizzes} onQuizSelect={setCurrentQuiz}/>
