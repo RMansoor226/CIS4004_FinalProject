@@ -1,0 +1,146 @@
+html, body {
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+}
+
+#dashboardPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    color: white;
+    background-color: royalblue;
+
+    min-width: 300px;
+    min-height: 600px;
+
+    width: 1200px;
+    height: 100vh;
+
+    padding: 10px;
+    margin: 0;
+
+    overflow: hidden;
+}
+
+#headerSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    min-width: 300px;
+    min-height: 150px;
+
+    width: 80%;
+    height: 150px;
+
+    padding: 10px;
+    border: 1px solid midnightblue;
+    border-radius: 10px;
+    margin-bottom: 50px;
+
+    background-color: midnightblue;
+}
+
+#headerButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#headerButtons > button {
+    min-width: 200px;
+    min-height: 50px;
+
+    margin: 0 40px;
+    border: 1px solid white;
+    border-radius: 10px;
+
+    color: white;
+    background-color: midnightblue;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 400px;
+    min-height: 100px;
+
+    margin: 20px 10px;
+    padding: 10px;
+    border: 1px solid midnightblue;
+    border-radius: 10px;
+
+    background-color: midnightblue;
+}
+
+.card > h1 {
+    align-self: flex-start;
+
+    margin: 10px 0;
+}
+
+.tags {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 10px 0;
+}
+
+.tags > li {
+    min-width: 50px;
+    width: 120px;
+
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.card > button {
+    min-width: 100px;
+    min-height: 30px;
+
+    border: 1px solid white;
+    border-radius: 10px;
+
+    color: midnightblue;
+    background-color: white;
+}
+
+#contentPanels {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+
+    height: calc(100vh - 200px);
+}
+
+.panel {
+    width: 500px;
+    height: 100%;
+
+    border: 1px solid midnightblue;
+    border-radius: 10px;
+    margin: 0 10px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-color: skyblue;
+}
