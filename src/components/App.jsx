@@ -5,6 +5,19 @@ import Quiz from './Quiz.jsx'
 import QuizScores from './QuizScores.jsx'
 import '../styling/App.css'
 
+const users = [
+    {
+        username: "admin1",
+        password: "admin123",
+        role: "admin"
+    },
+    {
+        username: "user1",
+        password: "user123",
+        role: "user"
+    }
+];
+
 const answer0 = {
     answerID : 1000,
     answerText : "A variable stores data that can be used later in a program"
@@ -96,29 +109,29 @@ const testQuiz0 = {
 
 // Revise these objects
 
-// const testQuiz1 = {
-//     quizID : 11,
-//     quizName : "Test Quiz 1",
-//     quizDescription : "This is an example description for a test quiz to test its basic functionality",
-//     quizTags : [ "test", "prototype", "not ready" ],
-//     questions : [ question0, question1, question2 ]
-// }
-//
-// const testQuiz2 = {
-//     quizID : 12,
-//     quizName : "Test Quiz 2",
-//     quizDescription : "This is an example description for a test quiz to test its basic functionality",
-//     quizTags : [ "test", "prototype", "not ready" ],
-//     questions : [ question0, question1, question2 ]
-// }
-//
-// const testQuiz3 = {
-//     quizID : 13,
-//     quizName : "Test Quiz 3",
-//     quizDescription : "This is an example description for a test quiz to test its basic functionality",
-//     quizTags : [ "test", "prototype", "not ready" ],
-//     questions : [ question0, question1, question2 ]
-// }
+const testQuiz1 = {
+    quizID : 11,
+    quizName : "Test Quiz 1",
+    quizDescription : "This is an example description for a test quiz to test its basic functionality",
+    quizTags : [ "test", "prototype", "not ready" ],
+    questions : [ question0, question1, question2 ]
+}
+
+const testQuiz2 = {
+    quizID : 12,
+    quizName : "Test Quiz 2",
+    quizDescription : "This is an example description for a test quiz to test its basic functionality",
+    quizTags : [ "test", "prototype", "not ready" ],
+    questions : [ question0, question1, question2 ]
+}
+
+const testQuiz3 = {
+    quizID : 13,
+    quizName : "Test Quiz 3",
+    quizDescription : "This is an example description for a test quiz to test its basic functionality",
+    quizTags : [ "test", "prototype", "not ready" ],
+    questions : [ question0, question1, question2 ]
+}
 
 const testCourse0 = {
     courseID : 0,
@@ -130,49 +143,61 @@ const testCourse0 = {
 
 // Revise these items as well
 
-// const testCourse1 = {
-//     courseID : 1,
-//     courseName : "Test Course 1",
-//     courseDescription : "This is an example description for a test course to test its basic functionality",
-//     courseTags : [ "test course", "prototype course", "course not ready"],
-//     quizzes : [ testQuiz1, testQuiz2, testQuiz3, testQuiz0 ]
-// }
-//
-// const testCourse2 = {
-//     courseID : 2,
-//     courseName : "Test Course 2",
-//     courseDescription : "This is an example description for a test course to test its basic functionality",
-//     courseTags : [ "test course", "prototype course", "course not ready"],
-//     quizzes : [ testQuiz2, testQuiz3, testQuiz0, testQuiz1 ]
-// }
-//
-// const testCourse3 = {
-//     courseID : 3,
-//     courseName : "Test Course 3",
-//     courseDescription : "This is an example description for a test course to test its basic functionality",
-//     courseTags : [ "test course", "prototype course", "course not ready"],
-//     quizzes : [ testQuiz3, testQuiz0, testQuiz1, testQuiz2 ]
-// }
+const testCourse1 = {
+    courseID : 1,
+    courseName : "Test Course 1",
+    courseDescription : "This is an example description for a test course to test its basic functionality",
+    courseTags : [ "test course", "prototype course", "course not ready"],
+    quizzes : [ testQuiz1, testQuiz2, testQuiz3, testQuiz0 ]
+}
+
+const testCourse2 = {
+    courseID : 2,
+    courseName : "Test Course 2",
+    courseDescription : "This is an example description for a test course to test its basic functionality",
+    courseTags : [ "test course", "prototype course", "course not ready"],
+    quizzes : [ testQuiz2, testQuiz3, testQuiz0, testQuiz1 ]
+}
+
+const testCourse3 = {
+    courseID : 3,
+    courseName : "Test Course 3",
+    courseDescription : "This is an example description for a test course to test its basic functionality",
+    courseTags : [ "test course", "prototype course", "course not ready"],
+    quizzes : [ testQuiz3, testQuiz0, testQuiz1, testQuiz2 ]
+}
 
 const testCourseGroup = [testCourse0, testCourse1, testCourse2, testCourse3];
 
 function App() {
     const [currentPage, setCurrentPage] = useState("login");
+    const [currentUser, setCurrentUser] = useState(null);
     const [currentQuiz, setCurrentQuiz] = useState(null);
     const [quizResults, setQuizResults] = useState(null);
+
+
+    const handleLogin = (user) => {
+        setCurrentUser(user);
+
+        if (user.role === "admin") {
+            setCurrentPage("dashboard");
+        } else {
+            setCurrentPage("dashboard"); // or "courses" later
+        }
+    };
 
     return (
         <div id={"appPage"}>
             {currentPage === "login" &&
                 <Login
-                    onLogin={
-                        () => setCurrentPage("dashboard")
-                    }
+                    users={users}
+                    onLogin={handleLogin}
                 />
             }
             {currentPage === "dashboard" &&
                 <Dashboard
                     courses={testCourseGroup}
+                    currentUser={currentUser}
                     onQuizSelect={
                         (quiz) => {
                             console.log("Quiz Button Clicked!");
