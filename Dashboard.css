@@ -1,0 +1,84 @@
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#dashboardPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    background-color: midnightblue;
+    color: white;
+
+    min-width: 300px;
+    min-height: 600px;
+
+    width: 1000px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#headerSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    min-width: 300px;
+    min-height: 150px;
+
+    width: 1000px;
+    height: 150px;
+
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 50px;
+
+    background-color: royalblue;
+}
+
+#headerButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#headerButtons > button {
+    min-width: 200px;
+    min-height: 50px;
+
+    margin: 0 40px;
+    border-radius: 10px;
+    background-color: lightblue;
+}
+
+.card {
+    min-width: 400px;
+    min-height: 100px;
+
+    margin: 0 10px 20px 10px;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+#contentPanels {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+}
+
+.panel {
+    width: 50%;
+    max-height: 500px;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
