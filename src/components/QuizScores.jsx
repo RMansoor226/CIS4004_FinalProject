@@ -1,36 +1,32 @@
-
-import '../styling/QuizScores.css'
+import "../styling/QuizScores.css"
 
 function QuizScores(props) {
-    const quizResults = props.progressReport.quizResults;
+    const correctAnswers = props.quiz.questions.map(question => question.correctAnswerID);
+    console.log(correctAnswers);
+
+    let score = 0;
+
+    props.quiz.questions.forEach((q, index) => {
+        if (props.answers[index] === correctAnswers[index]) {
+            score++;
+        }
+    });
 
     return (
-        <section id={"quizScoresPage"}>
-            <h1>Progress Report</h1>
-
-            <section className={"progressSummaryCard"}>
-                <h2>{props.course.courseName}</h2>
-                <p>Completed Quizzes: {props.progressReport.completedQuizzes} / {props.progressReport.totalQuizzes}</p>
-                <p>Course Completion: {props.progressReport.courseCompletion}%</p>
-            </section>
-
-            <section className={"quizGradesSection"}>
-                <h2>Quiz Grades</h2>
-
-                {quizResults.length === 0 ? (
-                    <p>No quizzes completed yet.</p>
-                ) : (
-                    quizResults.map((quizResult) => (
-                        <section className={"quizGradeCard"} key={quizResult.quizID}>
-                            <h3>{quizResult.quizName}</h3>
-                            <p>Score: {quizResult.score} / {quizResult.totalQuestions}</p>
-                            <p>Grade: {quizResult.gradePercent}%</p>
-                        </section>
-                    ))
-                )}
-            </section>
-
-            <button onClick={props.onBackToDashboard}>Back to Dashboard</button>
+        <section id={"quizResultsContainer"}>
+            <h1>{props.quiz.quizName} Results</h1>
+            <h3>You got {score} out of {props.quiz.questions.length} right!</h3>
+            <ul id={"questionList"}>
+                {props.quiz.questions.map((q, index) => (
+                    <li key={index}>
+                        <strong>Question #{index + 1}:</strong>
+                        {props.answers[index] === correctAnswers[index]
+                            ? " Correct"
+                            : " Incorrect"}
+                    </li>
+                ))}
+            </ul>
+            <h2>Score: {(score / props.quiz.questions.length) * 100}%</h2>
         </section>
     );
 }
