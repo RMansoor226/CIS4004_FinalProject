@@ -1,64 +1,83 @@
-import "../styling/Login.css";
-import { useState } from "react";
+import "../styling/Login.css"
+import { useState } from "react"
 
-function Login({ users, onLogin }) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+function Login(props) {
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleRegister = async (e) => {
+        e.preventDefault()
 
-        const foundUser = users.find(
-            (user) =>
-                user.username === username.trim() &&
-                user.password === password.trim()
-        );
+        const res = await fetch("http://localhost:5000/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        })
 
-        if (!foundUser) {
-            setError("Invalid username or password");
-            return;
+        const data = await res.json()
+        alert(data.message)
+    }
+
+    const handleLogin = async (e) => {
+        e.preventDefault()
+
+        const res = await fetch("http://localhost:5000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        })
+
+        const data = await res.json()
+        alert(data.message)
+
+        if (data.message === "Login successful") {
+            props.onLogin()
         }
-
-        setError("");
-        onLogin(foundUser);
-    };
+    }
 
     return (
-        <div id="loginPage">
-            <form id="loginForm" onSubmit={handleSubmit}>
-                <h2 id="loginHeader">Code-School Login:</h2>
+        <div id={"loginPage"}>
+            <form id={"loginForm"}>
+                <h2 id={"loginHeader"}>Code-School Login:</h2>
 
-                <span className="loginField">
-                    <label htmlFor="username">Username</label>
+                <span className={"loginField"}>
+                    <label htmlFor={"username"}>Username</label>
                     <input
-                        type="text"
-                        id="username"
-                        placeholder="Enter username"
+                        type={"text"}
+                        id={"username"}
+                        name={"username"}
+                        placeholder={"Enter username"}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </span>
 
-                <span className="loginField">
-                    <label htmlFor="password">Password</label>
+                <span className={"loginField"}>
+                    <label htmlFor={"password"}>Password</label>
                     <input
-                        type="password"
-                        id="password"
-                        placeholder="Enter password"
+                        type={"password"}
+                        id={"password"}
+                        name={"password"}
+                        placeholder={"Enter password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </span>
 
-                <button id="loginButton" type="submit">
+                <button id={"loginButton"} type={"button"} onClick={handleLogin}>
                     Login
                 </button>
 
-                {error && <p>{error}</p>}
+                <button type={"button"} onClick={handleRegister}>
+                    Register
+                </button>
             </form>
         </div>
-    );
+    )
 }
 
-export default Login;
+export default Login
