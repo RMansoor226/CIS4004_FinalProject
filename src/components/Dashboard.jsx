@@ -1,38 +1,90 @@
-import './Dashboard.css';
+import '../styling/Dashboard.css';
+import {useState} from "react";
 
-function Header() {
+// Component that represents dashboard page's header
+function Header({user}) {
+    const title = user?.role === "admin"
+        ? "Admin Dashboard"
+        : "User Dashboard";
     return (
       <section id={"headerSection"}>
-          <h1>CodeSchool</h1>
+          <h1>{title}</h1>
           <nav id={"headerButtons"}>
               <button>Courses</button>
               <button>Progress</button>
+              {user?.role === "admin" && <button>Manage</button>}
           </nav>
       </section>
     );
 }
 
+// Component that represents individual course cards
 function CourseCard(props) {
     return (
-        <section className={"courseCard"}>
+        <section className={"card"}>
             <h1>{props.course.courseName}</h1>
-            <h2>Tags</h2>
-            <ul>
-                {props.course.courseTags.map((tag) => (
-                    <li>{tag}</li>
+            <ul className={"tags"}>
+                {props.course.courseTags.map((tag, index) => (
+                    <li key={index}>{tag}</li>
                 ))}
             </ul>
+            <button onClick={props.onPick}>Select</button>
         </section>
     );
 }
 
-// function CourseView(props) {
-//     return (
-//
-//     );
-// }
+// Component that represents left-side panel that houses all course cards
+function CourseView(props) {
+    return (
+        <section>
+            {props.courseGroup.map((currCourse) => (
+                <CourseCard
+                    key={currCourse.courseID}
+                    course={currCourse}
+                    onPick={
+                        () => props.onCourseSelect(currCourse)
+                    }
+                />
+            ))}
+        </section>
+    );
+}
 
+// Component that represents individual quiz cards
+function QuizCard(props) {
+    return (
+        <div className={"card"}>
+            <h1>{props.quiz.quizName}</h1>
+            <ul className={"tags"}>
+                {props.quiz.quizTags.map((tag, index) => (
+                    <li key={index}>{tag}</li>
+                ))}
+            </ul>
+            <button onClick={props.onQuizSelect}>Select</button>
+        </div>
+    );
+}
+
+// Component that represents right-side panel that houses all quiz cards
+function QuizView(props) {
+    return (
+        <section>
+            {props.quizGroup.map((currQuiz) => (
+                <QuizCard
+                    key={currQuiz.quizID}
+                    quiz={currQuiz}
+                    onQuizSelect={() => props.onQuizSelect(currQuiz)} />
+            ))}
+        </section>
+    );
+}
+
+// Component that produces entire dashboard page using all previously listed components
 function Dashboard(props) {
+    // Track currently selected course
+    const [currentCourse, setCurrentCourse] = useState(props.courses[0]);
+    const setCurrentQuiz = props.onQuizSelect;
+
     return (
         // Header Element that includes Logo with Navigation Buttons
         // Separate Panel that starts as one unit showing all courses
@@ -41,17 +93,23 @@ function Dashboard(props) {
         // Second panel is a view of the available quizzes
         // Upon selection of a quiz the page jumps to the selected quiz's instructions page
         <div id={"dashboardPage"}>
-            <Header />
+            <Header user={props.currentUser} />
             <div id={"contentPanels"}>
-                <section id={"coursePanel"}>
-                    <CourseCard course={props.course}/>
+                <section className={"panel"} id={"coursePanel"}>
+                    <CourseView courseGroup={props.courses} onCourseSelect={setCurrentCourse}/>
+                    {props.currentUser?.role === "admin" && (
+                        <div>
+                            <h3>Admin Controls</h3>
+                            <button>Add Course</button>
+                            <button>Edit Course</button>
+                            <button>Delete Course</button>
+                        </div>
+                    )}
                 </section>
-                <section id={"quizPanel"}>
-                    <CourseCard course={props.course}/>
+                <section className={"panel"} id={"quizPanel"}>
+                    <QuizView quizGroup={currentCourse.quizzes} onQuizSelect={setCurrentQuiz}/>
                 </section>
             </div>
-
-
         </div>
     );
 }

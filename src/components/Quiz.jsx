@@ -55,9 +55,11 @@ function Quiz(props) {
                 }
             />
 
+            {console.log(selectedAnswers)}
+
             <nav id={"quizNavButtons"}>
                 <button id={"backButton"} onClick={previousQuestion}>Back</button>
-                <button id={"submitButton"} onClick={props.onSubmit}>Submit</button>
+                <button id={"submitButton"} onClick={() => props.onSubmit(selectedAnswers)}>Submit</button>
                 <button id={"nextButton"} onClick={nextQuestion}>Next</button>
             </nav>
         </section>
