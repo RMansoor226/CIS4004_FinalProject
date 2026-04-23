@@ -1,0 +1,14 @@
+### GET request to users collection
+GET http://localhost:5000/users
+###
+
+### POST request to users collection
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+  "username": "peter",
+  "password": "griffin",
+  "role": "user"
+}
+###
