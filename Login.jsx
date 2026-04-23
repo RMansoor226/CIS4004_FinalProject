@@ -2,15 +2,30 @@ import "../styling/Login.css";
 import { useState } from "react";
 
 function Login({ users, onLogin }) {
+    const [isRegisterMode, setIsRegisterMode] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const clearMessages = () => {
         setError("");
         setSuccessMessage("");
+    };
+
+    const switchToLogin = () => {
+        setIsRegisterMode(false);
+        clearMessages();
+    };
+
+    const switchToRegister = () => {
+        setIsRegisterMode(true);
+        clearMessages();
+    };
+
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+        clearMessages();
 
         if (!username.trim() || !password.trim()) {
             setError("Please enter a username and password");
@@ -42,12 +57,12 @@ function Login({ users, onLogin }) {
         }
     };
 
-    const handleRegister = async () => {
-        setError("");
-        setSuccessMessage("");
+    const handleRegisterSubmit = async (e) => {
+        e.preventDefault();
+        clearMessages();
 
         if (!username.trim() || !password.trim()) {
-            setError("Please enter a username and password");
+            setError("Please enter a new username and password");
             return;
         }
 
@@ -61,7 +76,7 @@ function Login({ users, onLogin }) {
         }
 
         try {
-            const res = await fetch("http://localhost:5000/users", {
+            const res = await fetch("http://localhost:5000/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -83,6 +98,7 @@ function Login({ users, onLogin }) {
             setUsername("");
             setPassword("");
             setSuccessMessage("Account created successfully. You can now log in.");
+            setIsRegisterMode(false);
         } catch (err) {
             setError("Server Error");
         }
@@ -90,26 +106,41 @@ function Login({ users, onLogin }) {
 
     return (
         <div id="loginPage">
-            <form id="loginForm" onSubmit={handleSubmit}>
-                <h2 id="loginHeader">Code-School Login:</h2>
+            <form
+                id="loginForm"
+                onSubmit={isRegisterMode ? handleRegisterSubmit : handleLoginSubmit}
+            >
+                <h2 id="loginHeader">
+                    {isRegisterMode ? "Create Account" : "CodeSchool"}
+                </h2>
+
+                <p id="loginSubtext">
+                    {isRegisterMode
+                        ? "Create a new username and password"
+                        : "DuoLingo for Coding"}
+                </p>
 
                 <span className="loginField">
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">
+                        {isRegisterMode ? "New Username" : "Username"}
+                    </label>
                     <input
                         type="text"
                         id="username"
-                        placeholder="Enter username"
+                        placeholder={isRegisterMode ? "Create username" : "Enter username"}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </span>
 
                 <span className="loginField">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">
+                        {isRegisterMode ? "New Password" : "Password"}
+                    </label>
                     <input
                         type="password"
                         id="password"
-                        placeholder="Enter password"
+                        placeholder={isRegisterMode ? "Create password" : "Enter password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -117,15 +148,34 @@ function Login({ users, onLogin }) {
 
                 <div id="loginButtons">
                     <button className="loginButton" type="submit">
-                        Login
+                        {isRegisterMode ? "Create Account" : "Login"}
                     </button>
-                    <button
-                        className="loginButton"
-                        type="button"
-                        onClick={handleRegister}
-                    >
-                        Register
-                    </button>
+                </div>
+
+                <div id="modeSwitch">
+                    {isRegisterMode ? (
+                        <p>
+                            Already have an account?{" "}
+                            <button
+                                type="button"
+                                className="switchButton"
+                                onClick={switchToLogin}
+                            >
+                                Back to Login
+                            </button>
+                        </p>
+                    ) : (
+                        <p>
+                            New here?{" "}
+                            <button
+                                type="button"
+                                className="switchButton"
+                                onClick={switchToRegister}
+                            >
+                                Create Account
+                            </button>
+                        </p>
+                    )}
                 </div>
 
                 {error && <p id="errorMessage">{error}</p>}
