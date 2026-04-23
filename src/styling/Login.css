@@ -1,45 +1,133 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top right, rgba(166, 0, 255, 0.22), transparent 25%),
+        radial-gradient(circle at bottom left, rgba(0, 76, 255, 0.18), transparent 25%),
+        #05070d;
+    color: white;
+}
+
 #loginPage {
+    width: 100vw;
+    min-height: 100vh;
+
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    padding: 20px;
 }
 
 #loginForm {
+    width: 100%;
+    max-width: 440px;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    gap: 18px;
 
-    border: 1px solid white;
-    border-radius: 10px;
+    padding: 36px 30px;
+    border-radius: 24px;
 
-    width: 300px;
-    height: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(6px);
+}
 
+#loginHeader {
+    margin: 0;
+    text-align: center;
     color: white;
-    background-color: midnightblue;
+    font-size: 2.7rem;
+    font-weight: 700;
+}
+
+#loginSubtext {
+    margin: -6px 0 10px 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
 }
 
 .loginField {
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin: 5px;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .loginField > label {
-    margin: 5px;
-
-    width: 100px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
-#loginButton {
-    margin: 10px;
+.loginField > input {
+    width: 100%;
+    padding: 14px 16px;
 
-    width: 100px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
 
-    color: #1f2028;
-    background-color: white;
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+    font-size: 1rem;
+}
+
+.loginField > input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.loginField > input:focus {
+    outline: none;
+    border-color: rgba(255, 94, 168, 0.75);
+    box-shadow: 0 0 0 3px rgba(109, 59, 255, 0.18);
+}
+
+#loginButtons {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.loginButton {
+    flex: 1;
+    padding: 14px 16px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: linear-gradient(135deg, #6d3bff, #ff5ea8);
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.loginButton:hover {
+    opacity: 0.92;
+}
+
+#errorMessage {
+    margin: 8px 0 0 0;
+    text-align: center;
+    color: #ffb3c7;
+    font-size: 0.95rem;
+}
+
+#successMessage {
+    margin: 8px 0 0 0;
+    text-align: center;
+    color: #b8ffcf;
+    font-size: 0.95rem;
 }
