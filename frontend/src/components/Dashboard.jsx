@@ -1,181 +1,221 @@
 import "../styling/Dashboard.css";
 import { useState } from "react";
 
-// HEADER
-function Header({ user, manageOpen, onToggleManage }) {
-    const title = user?.role === "admin" ? "CodeSchool Admin" : "CodeSchool";
+function Header({ user, onToggleManage, manageOpen }) {
+    const title = user?.role === "admin"
+        ? "Admin Dashboard"
+        : "User Dashboard";
 
     return (
-        <section id="headerSection">
+        <section id={"headerSection"}>
             <h1>{title}</h1>
-
-            {user?.role === "admin" && (
-                <nav id="headerButtons">
+            <nav id={"headerButtons"}>
+                {user?.role === "admin" && (
                     <button onClick={onToggleManage}>
                         {manageOpen ? "Close Manage" : "Manage"}
                     </button>
-                </nav>
-            )}
+                )}
+            </nav>
         </section>
     );
 }
 
-// COURSE CARD
-function CourseCard({ course, user, manageOpen, onPick, onEdit, onDelete }) {
+function CourseCard(props) {
     return (
-        <section className="card">
-            <h1>{course.courseName}</h1>
-
-            <ul className="tags">
-                {course.courseTags.map((tag, index) => (
+        <section className={"card"}>
+            <h1>{props.course.courseName}</h1>
+            <ul className={"tags"}>
+                {props.course.courseTags?.map((tag, index) => (
                     <li key={index}>{tag}</li>
                 ))}
             </ul>
 
-            <button onClick={onPick}>Select</button>
+            <button onClick={props.onPick}>Select</button>
 
-            {user?.role === "admin" && manageOpen && (
-                <div className="adminCourseActions">
-                    <button onClick={() => onEdit(course.courseID)}>Edit</button>
-                    <button onClick={() => onDelete(course.courseID)}>Delete</button>
+            {props.user?.role === "admin" && props.manageOpen && (
+                <div>
+                    <button onClick={() => props.onEdit(props.course._id)}>
+                        Edit Course
+                    </button>
+                    <button onClick={() => props.onDelete(props.course._id)}>
+                        Delete Course
+                    </button>
                 </div>
             )}
         </section>
     );
 }
 
-// COURSE VIEW
-function CourseView({ courseGroup, user, manageOpen, onCourseSelect, onEdit, onDelete }) {
+function CourseView(props) {
     return (
         <section>
-            {courseGroup.map((currCourse) => (
+            {props.courses.map((currCourse) => (
                 <CourseCard
-                    key={currCourse.courseID}
+                    key={currCourse._id}
                     course={currCourse}
-                    user={user}
-                    manageOpen={manageOpen}
-                    onPick={() => onCourseSelect(currCourse)}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
+                    user={props.user}
+                    manageOpen={props.manageOpen}
+                    onPick={() => props.onCourseSelect(currCourse)}
+                    onEdit={props.onEdit}
+                    onDelete={props.onDelete}
                 />
             ))}
         </section>
     );
 }
 
-// QUIZ CARD
-function QuizCard({ quiz, onQuizSelect }) {
+function QuizCard(props) {
     return (
-        <div className="card">
-            <h1>{quiz.quizName}</h1>
-
-            <ul className="tags">
-                {quiz.quizTags.map((tag, index) => (
+        <div className={"card"}>
+            <h1>{props.quiz.quizName}</h1>
+            <ul className={"tags"}>
+                {props.quiz.quizTags?.map((tag, index) => (
                     <li key={index}>{tag}</li>
                 ))}
             </ul>
-
-            <button onClick={onQuizSelect}>Select</button>
+            <button onClick={props.onQuizSelect}>Select</button>
         </div>
     );
 }
 
-// QUIZ VIEW
-function QuizView({ quizGroup, onQuizSelect }) {
+function QuizView(props) {
     return (
         <section>
-            {quizGroup.map((currQuiz) => (
+            {props.quizzes.map((currQuiz) => (
                 <QuizCard
-                    key={currQuiz.quizID}
+                    key={currQuiz._id}
                     quiz={currQuiz}
-                    onQuizSelect={() => onQuizSelect(currQuiz)}
+                    onQuizSelect={() => props.onQuizSelect(currQuiz)}
                 />
             ))}
         </section>
     );
 }
 
-// MAIN DASHBOARD
-function Dashboard({ currentUser, courses: initialCourses, onQuizSelect }) {
-    const [courses, setCourses] = useState(initialCourses);
-    const [currentCourse, setCurrentCourse] = useState(initialCourses[0]);
+function Dashboard(props) {
+    const [courses, setCourses] = useState(props.courses ?? []);
+    const [currentCourse, setCurrentCourse] = useState(
+        Array.isArray(props.courses) && props.courses.length > 0
+            ? props.courses[0]
+            : null
+    );
+    const [newCourseName, setNewCourseName] = useState("");
+    const [newCourseDescription, setNewCourseDescription] = useState("");
     const [manageOpen, setManageOpen] = useState(false);
 
-    // ADMIN: Add Course
+    const setCurrentQuiz = props.onQuizSelect;
+
     const addCourse = () => {
-        const name = prompt("Enter course name:");
-        if (!name) return;
+        if (!newCourseName.trim()) return;
 
         const newCourse = {
-            courseID: Date.now(),
-            courseName: name,
+            _id: Date.now(),
+            courseName: newCourseName,
+            courseDescription: newCourseDescription || "New course description",
             courseTags: ["new"],
             quizzes: []
         };
 
-        const updated = [...courses, newCourse];
-        setCourses(updated);
+        const updatedCourses = [...courses, newCourse];
+        setCourses(updatedCourses);
         setCurrentCourse(newCourse);
+        setNewCourseName("");
+        setNewCourseDescription("");
     };
 
-    // ADMIN: Edit Course
-    const editCourse = (courseID) => {
-        const updatedName = prompt("Enter new course name:");
-        if (!updatedName) return;
+    const editCourse = (_id) => {
+        const updatedName = prompt("Enter the new course name:");
+        if (!updatedName || !updatedName.trim()) return;
 
-        const updatedCourses = courses.map((c) =>
-            c.courseID === courseID ? { ...c, courseName: updatedName } : c
+        const updatedCourses = courses.map((course) =>
+            course._id === _id
+                ? { ...course, courseName: updatedName }
+                : course
         );
 
         setCourses(updatedCourses);
 
-        if (currentCourse.courseID === courseID) {
-            setCurrentCourse(updatedCourses.find((c) => c.courseID === courseID));
+        if (currentCourse._id === _id) {
+            const updatedCurrentCourse = updatedCourses.find(
+                (course) => course._id === _id
+            );
+            setCurrentCourse(updatedCurrentCourse);
         }
     };
 
-    // ADMIN: Delete Course
-    const deleteCourse = (courseID) => {
-        const updated = courses.filter((c) => c.courseID !== courseID);
-        setCourses(updated);
+    const deleteCourse = (_id) => {
+        const updatedCourses = courses.filter(
+            (course) => course._id !== _id
+        );
 
-        if (currentCourse.courseID === courseID) {
-            setCurrentCourse(updated[0] || null);
+        setCourses(updatedCourses);
+
+        if (updatedCourses.length > 0) {
+            if (currentCourse._id === _id) {
+                setCurrentCourse(updatedCourses[0]);
+            }
+        } else {
+            setCurrentCourse({
+                _id: 0,
+                courseName: "",
+                courseDescription: "",
+                courseTags: [],
+                quizzes: []
+            });
         }
+    };
+
+    const toggleManage = () => {
+        setManageOpen(!manageOpen);
     };
 
     return (
-        <div id="dashboardPage">
+        <div id={"dashboardPage"}>
             <Header
-                user={currentUser}
+                user={props.currentUser}
+                onToggleManage={toggleManage}
                 manageOpen={manageOpen}
-                onToggleManage={() => setManageOpen(!manageOpen)}
             />
 
-            <div id="contentPanels">
-                <section className="panel" id="coursePanel">
+            <div id={"contentPanels"}>
+                <section className={"panel"} id={"coursePanel"}>
                     <CourseView
-                        courseGroup={courses}
-                        user={currentUser}
+                        courses={courses}
+                        user={props.currentUser}
                         manageOpen={manageOpen}
                         onCourseSelect={setCurrentCourse}
                         onEdit={editCourse}
                         onDelete={deleteCourse}
                     />
 
-                    {currentUser?.role === "admin" && manageOpen && (
-                        <div className="adminControls">
+                    {props.currentUser?.role === "admin" && manageOpen && (
+                        <div>
                             <h3>Admin Controls</h3>
+
+                            <input
+                                type="text"
+                                placeholder="Course name"
+                                value={newCourseName}
+                                onChange={(e) => setNewCourseName(e.target.value)}
+                            />
+
+                            <input
+                                type="text"
+                                placeholder="Course description"
+                                value={newCourseDescription}
+                                onChange={(e) => setNewCourseDescription(e.target.value)}
+                            />
+
                             <button onClick={addCourse}>Add Course</button>
                         </div>
                     )}
                 </section>
 
-                <section className="panel" id="quizPanel">
-                    {currentCourse ? (
+                <section className={"panel"} id={"quizPanel"}>
+                    {currentCourse && currentCourse.quizzes ? (
                         <QuizView
-                            quizGroup={currentCourse.quizzes}
-                            onQuizSelect={onQuizSelect}
+                            quizzes={currentCourse.quizzes}
+                            onQuizSelect={setCurrentQuiz}
                         />
                     ) : (
                         <p>No course selected.</p>
