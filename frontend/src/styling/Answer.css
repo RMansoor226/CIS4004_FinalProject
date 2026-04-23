@@ -1,0 +1,20 @@
+#answerContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin: 5px;
+    border: solid black 1px;
+    border-radius: 10px;
+
+    width: 600px;
+
+}
+
+#answerButton {
+    margin: 5px;
+}
+
+#answerText {
+
+}

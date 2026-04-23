@@ -1,0 +1,6 @@
+html, body {
+    height: 100%;
+    overflow: hidden;   /* Prevent page scroll */
+
+    background-color: #F7F7F7;
+}
