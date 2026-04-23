@@ -1,13 +1,16 @@
-import "../styling/Login.css";
+import "./styling/Login.css";
 import { useState } from "react";
 
 function Login({ users, onLogin }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+        setSuccessMessage("");
 
         try {
             const res = await fetch("http://localhost:5000/auth/login", {
@@ -15,7 +18,10 @@ function Login({ users, onLogin }) {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({
+                    username: username.trim(),
+                    password: password.trim()
+                })
             });
 
             const data = await res.json();
@@ -25,8 +31,44 @@ function Login({ users, onLogin }) {
                 return;
             }
 
-            setError("");
             onLogin(data.user);
+        } catch (err) {
+            setError("Server Error");
+        }
+    };
+
+    const handleRegister = async () => {
+        setError("");
+        setSuccessMessage("");
+
+        if (!username.trim() || !password.trim()) {
+            setError("Please enter a username and password");
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:5000/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username.trim(),
+                    password: password.trim(),
+                    role: "user"
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data.error || "Could not create account");
+                return;
+            }
+
+            setUsername("");
+            setPassword("");
+            setSuccessMessage("Account request submitted. After approval, log in with your new username and password.");
         } catch (err) {
             setError("Server Error");
         }
@@ -35,8 +77,7 @@ function Login({ users, onLogin }) {
     return (
         <div id="loginPage">
             <form id="loginForm" onSubmit={handleSubmit}>
-                <h2 id="loginHeader">CodeSchool</h2>
-                <p id="loginSubtext">DuoLingo for Coding</p>
+                <h2 id="loginHeader">Code-School Login:</h2>
 
                 <span className="loginField">
                     <label htmlFor="username">Username</label>
@@ -64,12 +105,17 @@ function Login({ users, onLogin }) {
                     <button className="loginButton" type="submit">
                         Login
                     </button>
-                    <button className="loginButton" type="button">
+                    <button
+                        className="loginButton"
+                        type="button"
+                        onClick={handleRegister}
+                    >
                         Register
                     </button>
                 </div>
 
                 {error && <p id="errorMessage">{error}</p>}
+                {successMessage && <p id="successMessage">{successMessage}</p>}
             </form>
         </div>
     );
