@@ -27,7 +27,8 @@ function Login({ users, onLogin }) {
     return (
         <div id="loginPage">
             <form id="loginForm" onSubmit={handleSubmit}>
-                <h2 id="loginHeader">Code-School Login:</h2>
+                <h2 id="loginHeader">CodeSchool</h2>
+                <p id="loginSubtext">DuoLingo for Coding</p>
 
                 <span className="loginField">
                     <label htmlFor="username">Username</label>
@@ -55,7 +56,7 @@ function Login({ users, onLogin }) {
                     Login
                 </button>
 
-                {error && <p>{error}</p>}
+                {error && <p id="errorMessage">{error}</p>}
             </form>
         </div>
     );
