@@ -1,83 +1,78 @@
-import "../styling/Login.css"
-import { useState } from "react"
+import "../styling/Login.css";
+import { useState } from "react";
 
-function Login(props) {
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+function Login({ users, onLogin }) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-    const handleRegister = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-        const res = await fetch("http://localhost:5000/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ username, password })
-        })
+        try {
+            const res = await fetch("http://localhost:5000/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username, password })
+            });
 
-        const data = await res.json()
-        alert(data.message)
-    }
+            const data = await res.json();
 
-    const handleLogin = async (e) => {
-        e.preventDefault()
+            if (!res.ok) {
+                setError(data.error || "Invalid username or password");
+                return;
+            }
 
-        const res = await fetch("http://localhost:5000/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ username, password })
-        })
-
-        const data = await res.json()
-        alert(data.message)
-
-        if (data.message === "Login successful") {
-            props.onLogin()
+            setError("");
+            onLogin(data.user);
+        } catch (err) {
+            setError("Server Error");
         }
-    }
+    };
 
     return (
-        <div id={"loginPage"}>
-            <form id={"loginForm"}>
-                <h2 id={"loginHeader"}>Code-School Login:</h2>
+        <div id="loginPage">
+            <form id="loginForm" onSubmit={handleSubmit}>
+                <h2 id="loginHeader">CodeSchool</h2>
+                <p id="loginSubtext">DuoLingo for Coding</p>
 
-                <span className={"loginField"}>
-                    <label htmlFor={"username"}>Username</label>
+                <span className="loginField">
+                    <label htmlFor="username">Username</label>
                     <input
-                        type={"text"}
-                        id={"username"}
-                        name={"username"}
-                        placeholder={"Enter username"}
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </span>
 
-                <span className={"loginField"}>
-                    <label htmlFor={"password"}>Password</label>
+                <span className="loginField">
+                    <label htmlFor="password">Password</label>
                     <input
-                        type={"password"}
-                        id={"password"}
-                        name={"password"}
-                        placeholder={"Enter password"}
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </span>
 
-                <button id={"loginButton"} type={"button"} onClick={handleLogin}>
-                    Login
-                </button>
+                <div id="loginButtons">
+                    <button className="loginButton" type="submit">
+                        Login
+                    </button>
+                    <button className="loginButton" type="button">
+                        Register
+                    </button>
+                </div>
 
-                <button type={"button"} onClick={handleRegister}>
-                    Register
-                </button>
+                {error && <p id="errorMessage">{error}</p>}
             </form>
         </div>
-    )
+    );
 }
 
-export default Login
+export default Login;
