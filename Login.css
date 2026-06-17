@@ -1,0 +1,48 @@
+#loginButtons {
+    display: flex;
+    justify-content: center;
+}
+
+.loginButton {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, #6d3bff, #ff5ea8);
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#modeSwitch {
+    text-align: center;
+    color: white;
+    margin-top: 6px;
+}
+
+.switchButton {
+    background: none;
+    border: none;
+    color: #ff9ec8;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1rem;
+}
+
+.switchButton:hover {
+    text-decoration: underline;
+}
+
+#errorMessage {
+    margin: 0;
+    text-align: center;
+    color: #ff9ec8;
+}
+
+#successMessage {
+    margin: 0;
+    text-align: center;
+    color: #9dffbd;
+}

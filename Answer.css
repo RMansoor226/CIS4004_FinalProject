@@ -1,0 +1,39 @@
+.answerContainer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 16px 18px;
+    border-radius: 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.answerContainer:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.answerButton {
+    accent-color: #ff5ea8;
+    transform: scale(1.2);
+}
+
+.answerText {
+    color: white;
+    font-size: 1.05rem;
+    width: 100%;
+}
+
+
+.answerContainer:has(input:checked) {
+    border: 2px solid #ff5ea8;
+    background: linear-gradient(
+        135deg,
+        rgba(123, 44, 255, 0.25),
+        rgba(255, 94, 168, 0.2)
+    );
+}
